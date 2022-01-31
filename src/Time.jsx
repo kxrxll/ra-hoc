@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import moment from 'moment';
-import './App.css';
+import './Time.css';
 
 function DateTime(props) {
     return (
