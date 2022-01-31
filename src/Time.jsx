@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import moment from 'moment';
+import './App.css';
 
 function DateTime(props) {
     return (
@@ -10,13 +12,24 @@ function Video(props) {
     return (
         <div className="video">
             <iframe src={props.url} frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            <DateTime date={props.date} />
+            <DateTime date={props.newDate} />
         </div>
     )
 }
 
 function VideoList(props) {
-    return props.list.map(item => <Video url={item.url} date={item.date} />);
+    return props.list.map(item => {
+      const UpgVideo = withBetterDate(Video);
+      return <UpgVideo url={item.url} oldDate={item.date} date={item.newDate}/>
+    });
+}
+
+function withBetterDate(Component) {
+  function Wrapper(props) {
+    const newDate = moment(props.oldDate, 'YYYY-MM-DD hh:mm:ss').fromNow();
+    return <Component newDate={newDate} {...props}/>;
+  }
+  return Wrapper;
 }
 
 export default function Time() {

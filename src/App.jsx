@@ -4,9 +4,9 @@ import './bootstrap.css';
 
 function App() {
   return (
-    <div>
+    <>
       <Time />
-    </div>
+    </>
   )
 }
 
