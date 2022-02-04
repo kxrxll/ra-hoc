@@ -42,26 +42,28 @@ function Video(props) {
     )
 };
 
-function List(props) {
-    return props.list.map(item => {
-        switch (item.type) {
-            case 'video':
-                if (item.views > 1000) {
-                  return <Popular><Video {...item}/></Popular>
-                }
-                return (
-                    <Video {...item} />
-                );
+function thisIsHoc(item) {
+    switch (item.type) {
+        case 'video':
+            if (item.views > 1000) {
+              return <Popular><Video {...item}/></Popular>
+            }
+            return (
+                <Video {...item} />
+            );
 
-            case 'article':
-                if (item.views < 100) {
-                  return <New><Article {...item}/></New>
-                }
-                return (
-                    <Article {...item} />
-                );
-        }
-    });
+        case 'article':
+            if (item.views < 100) {
+              return <New><Article {...item}/></New>
+            }
+            return (
+                <Article {...item} />
+            );
+    }
+}
+
+function List(props) {
+    return props.list.map(item => thisIsHoc(item));
 };
 
 export default function App() {
