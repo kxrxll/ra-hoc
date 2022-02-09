@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/iframe-has-title */
 /* eslint-disable default-case */
+import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
 import './Popular.css';
 
@@ -36,34 +37,56 @@ function Article(props) {
 function Video(props) {
     return (
         <div className="item item-video">
-            <iframe src={props.url} frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <iframe src={props.url} frameBorder="0" allow="autoplay; encrypted-media" allowFullscreen></iframe>
             <p className="views">Просмотров: {props.views}</p>
         </div>
     )
 };
 
-function thisIsHoc(item) {
+function MediaComponent(item) {
     switch (item.type) {
         case 'video':
-            if (item.views > 1000) {
-              return <Popular><Video {...item}/></Popular>
-            }
             return (
                 <Video {...item} />
             );
-
         case 'article':
-            if (item.views < 100) {
-              return <New><Article {...item}/></New>
-            }
             return (
-                <Article {...item} />
-            );
+                <Article {...item}/>
+            );  
     }
+
 }
 
+function withCheckingForNew(Component) {
+    function Wrapper(props) {
+        switch (props.type) {
+            case 'video':
+                if (props.views > 1000) {
+                  return <Popular><Component {...props}/></Popular>
+                }
+                return (
+                    <Component {...props}/>
+                );
+    
+            case 'article':
+                if (props.views < 100) {
+                  return <New><Component {...props}/></New>
+                }
+                return (
+                    <Component {...props}/>
+                );
+            default:
+                return false;
+        }
+    }
+    return Wrapper;
+  }
+
 function List(props) {
-    return props.list.map(item => thisIsHoc(item));
+    return props.list.map(item => {
+        const NewItem = withCheckingForNew(MediaComponent);
+        return <NewItem {...item} key={nanoid()}/>;
+    })
 };
 
 export default function App() {

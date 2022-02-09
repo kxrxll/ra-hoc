@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/iframe-has-title */
+/* eslint-disable no-unused-vars */
 import React, {useState} from 'react';
 import moment from 'moment';
 import './Time.css';
